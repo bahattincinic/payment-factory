@@ -16,7 +16,7 @@ public abstract class PaymentAbstract {
      * 
      * @return Map<String, String>
     */
-	public Map<String, String> getConfig(String path){
+	protected Map<String, String> getConfig(String path){
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			File file = new File(path);

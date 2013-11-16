@@ -9,11 +9,11 @@ public class FactoryTest {
 		try {
 			Request creditCardRequest = new Request();
 			creditCardRequest.setCardNumber("5246489643506379")
+							 .setOrderId("ORDER001")
 							 .setAmount(100)
 							 .setExpireMonth(10)
 							 .setExpireYear(14)
-							 .setSecurityCode(111)
-							 .setOrderId("ORD00000");
+							 .setSecurityCode(111);
 			PaymentInterface payment = PaymentFactory.getPayment("est");
 			System.out.println(payment.pay(creditCardRequest));
 		} catch (AdapterException e) {

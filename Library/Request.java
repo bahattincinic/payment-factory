@@ -20,24 +20,24 @@ public class Request {
 	private String cardNumber;
 	
 	/** Credit Card Expire Month
-     * @var string
+     * @var int
      */
-	private String expireMonth;
+	private int expireMonth;
 	
 	/** Credit Card Expire Year
-     * @var string
+     * @var int
      */
-	private String expireYear;
+	private int expireYear;
 	
 	/** Credit Card security Code
-     * @var string
+     * @var int
      */
-	private String securityCode;
+	private int securityCode;
 	
 	/** Order Total Amount
-     * @var string
+     * @var double
      */
-	private String amount;
+	private double amount;
 	
 	/**
      * @param String orderId
@@ -82,7 +82,7 @@ public class Request {
     */
 	public Request setSecurityCode(int securityCode) throws RequestException {
 		if(Integer.toString(securityCode).matches("^[0-9]{3,4}$")){
-			this.securityCode = Integer.toString(securityCode);
+			this.securityCode = securityCode;
 		}else{
 			throw new RequestException("Security Code Undifined");
 		}
@@ -96,7 +96,7 @@ public class Request {
     */
 	public Request setExpireMonth(int expireMonth) throws RequestException {
 		if(expireMonth > 0 && expireMonth < 13){
-			this.expireMonth = Integer.toString(expireMonth);
+			this.expireMonth = expireMonth;
 		}else{
 			throw new RequestException("Expire Month Undifined");
 		}
@@ -110,7 +110,7 @@ public class Request {
     */
 	public Request setExpireYear(int expireYear) throws RequestException {
 		if(expireYear > 0 && expireYear > 10){
-			this.expireYear = Integer.toString(expireYear);
+			this.expireYear = expireYear;
 		}else{
 			throw new RequestException("Expire Year Undifined");
 		}
@@ -122,7 +122,7 @@ public class Request {
      * @return Request
     */
 	public Request setAmount(double amount) {
-		this.amount = Double.toString(amount);
+		this.amount = amount;
 		return this;
 	}
 	
@@ -137,14 +137,23 @@ public class Request {
 		Field clsFields[] = cls.getDeclaredFields();
 		for(Field f:clsFields){
 		    try {
-		    	Object value = f.get(this);
-		    	if(value == null){
+		    	Class<?> type = f.getType();
+		    	// int control
+		    	if(type == int.class && f.getInt(this) == 0){
+		    		return false;
+		    	}
+		    	// double control
+		    	if(type == double.class && f.getDouble(this) == 0.0){
+		    		return false;
+		    	}
+		    	// string control
+		    	if(type == String.class && (f.get(this) == null || f.get(this) == "")){
 		    		return false;
 		    	}
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				return false;
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				return false;
 			}
 		}
 		return true;
@@ -167,28 +176,29 @@ public class Request {
 	/**
      * @return int expireMonth
     */
-	public String getExpireMonth(){
+	public int getExpireMonth(){
 		return this.expireMonth;
+		
 	}
 	
 	/**
      * @return int securityCode
     */
-	public String getSecurityCode(){
+	public int getSecurityCode(){
 		return this.securityCode;
 	}
 	
 	/**
      * @return int expireYear
     */
-	public String getExpireYear(){
+	public int getExpireYear(){
 		return this.expireYear;
 	}
 	
 	/**
-     * @return int amount
+     * @return double amount
     */
-	public String getAmount(){
+	public double getAmount(){
 		return this.amount;
 	}
 }
